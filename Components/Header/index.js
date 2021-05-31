@@ -6,7 +6,6 @@ const Header = () => {
 
         <View style={styles.container}>
             <Image style={styles.logo} source={require('../../src/images/logo.png')}/>
-            <Image style={styles.menu} source={require('../../src/images/menu.png')}/>
         </View>
 
     );
@@ -28,16 +27,16 @@ const styles = StyleSheet.create({
 
     logo: {
 
-        width: 50,
-        height: 30,
+        width: 70,
+        height: 50,
         resizeMode: 'contain',
 
     },
 
     menu: {
         
-        width: 50,
-        height: 30,
+        width: 70,
+        height: 50,
         resizeMode: 'contain',
 
     },

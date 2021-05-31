@@ -6,8 +6,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import { Context } from "../context/Store";
 import Login from "../Screens/Login";
 import Register from "../Screens/Register";
-import MainPage from "../Screens/main";
-import Expenses from "../Screens/expenses";
+import Stats from "../Screens/main";
+import StatsMain from "../Screens/statistics";
 import Incomes from "../Screens/incomes";
 import Navigator1 from "./nav";
 
@@ -56,27 +56,7 @@ const Navigator = () => {
               tabBarIcon: ({ focused }) => (
                 <View style={styles.nav}>
                   <Image
-                    source={require("../src/images/home.png")}
-                    resizeMode="contain"
-                    style={{
-                      width: 25,
-                      height: 20,
-                      tintColor: focused ? "#98B279" : "#333333",
-                    }}
-                  />
-                  <Text style={styles.ltext}>Home</Text>
-                </View>
-              ),
-            }}
-          />
-          <Tab.Screen
-            name="Expenses"
-            component={Expenses}
-            options={{
-              tabBarIcon: ({ focused }) => (
-                <View style={styles.nav}>
-                  <Image
-                    source={require("../src/images/wallet.png")}
+                    source={require("../src/images/wallets.png")}
                     resizeMode="contain"
                     style={{
                       width: 25,
@@ -85,6 +65,26 @@ const Navigator = () => {
                     }}
                   />
                   <Text style={styles.ltext}>Wallet</Text>
+                </View>
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="StatsMain"
+            component={StatsMain}
+            options={{
+              tabBarIcon: ({ focused }) => (
+                <View style={styles.nav}>
+                  <Image
+                    source={require("../src/images/statts.png")}
+                    resizeMode="contain"
+                    style={{
+                      width: 25,
+                      height: 20,
+                      tintColor: focused ? "#98B279" : "#333333",
+                    }}
+                  />
+                  <Text style={styles.ltext}>Stats</Text>
                 </View>
               ),
             }}

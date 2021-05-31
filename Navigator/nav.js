@@ -6,7 +6,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { Context } from "../context/Store";
 import EXP from '../Screens/expPage';
 import INC from '../Screens/incPage';
-import MainPage from "../Screens/main";
+import StatsMain from "../Screens/main";
 
 
 const Stack = createStackNavigator();
@@ -23,7 +23,7 @@ const Navigator1 = () => {
 
         <Stack.Screen
             name="Main"
-            component={MainPage}
+            component={StatsMain}
             options={{
                 header: () => null,
               }}

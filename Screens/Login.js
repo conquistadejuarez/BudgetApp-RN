@@ -28,7 +28,7 @@ const Login = ({navigation}) => {
     }
 
     axios
-    .post("https://budgetapp.digitalcube.rs/api/tenants/401dfe1c-d849-4ba7-9fe9-215017a54f45/sessions?", body)
+    .post("https://budgetapp.digitalcube.rs/api/tenants/ca346095-7475-4667-b6d7-c5bfb5e7aef3/sessions?", body)
     .then(r => {console.log(r.data); dispatch({type: 'SET_TOKEN',payload:r.data.token}); dispatch({type:'SET_NAME', payload:r.data.id})})
     .catch(e => console.log(e))
   }
@@ -45,7 +45,7 @@ const Login = ({navigation}) => {
       <View style={styles.header}>
         <Image
           style={styles.logo}
-          source={require("../src/images/Image.png")}
+          source={require("../src/images/logo.png")}
         />
       </View>
 

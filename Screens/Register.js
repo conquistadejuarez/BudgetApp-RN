@@ -32,7 +32,7 @@ const Register = ({ navigation }) => {
       last_name: last_name,
     };
     axios
-    .post("https://budgetapp.digitalcube.rs/api/tenants/401dfe1c-d849-4ba7-9fe9-215017a54f45/users", body)
+    .post("https://budgetapp.digitalcube.rs/api/tenants/ca346095-7475-4667-b6d7-c5bfb5e7aef3/users", body)
     .then((r) => console.log(r.data))
     .catch((e) => console.log(e));
 
@@ -44,7 +44,7 @@ const Register = ({ navigation }) => {
       <View style={styles.header}>
         <Image
           style={styles.logo}
-          source={require("../src/images/Image.png")}
+          source={require("../src/images/logo.png")}
         />
       </View>
 

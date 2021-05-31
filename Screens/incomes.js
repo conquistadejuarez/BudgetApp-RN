@@ -1,5 +1,5 @@
 import React, {useState, useContext} from "react";
-import { View, Text, StyleSheet, Dimensions, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Image } from "react-native";
 import {Context} from '../context/Store';
 
 
@@ -16,10 +16,20 @@ const logout = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.UC}>Under Construction!</Text>
 
-      <TouchableOpacity onPress={() => logout()}>
-          <Text style={{fontSize:20,color:'#000', marginTop:100, alignSelf:'center'}}>Log out</Text>
+      <Image
+          style={styles.logo}
+          source={require("../src/images/herologout.png")}
+        />
+        <View style={{alignItems:'center'}}>
+        <Text style={{fontSize:16, fontWeight:'700',}}>We hope Budget App has lived {"\n"} &nbsp;&nbsp;   up to your expectations</Text>
+        <Text style={{fontSize:12,}}>Our main pirority is to improve your budget</Text>
+        </View>
+
+        <TouchableOpacity 
+      onPress={() => logout()}
+      style={styles.big_btn}>
+        <Text style={styles.big_btn_text}>Log out</Text>
       </TouchableOpacity>
     </View>
   );
@@ -29,8 +39,13 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     height: Dimensions.get("window").height,
-    backgroundColor: "rgba(127, 196, 129, 0.08)",
     paddingHorizontal: 18,
+    backgroundColor:'#FFF'
+  },
+
+  logo: {
+
+    marginTop:100,
   },
 
   UC: {
@@ -40,7 +55,26 @@ const styles = StyleSheet.create({
     fontSize:20,
     marginTop:100,
 
-  }
+  },
+
+  big_btn: {
+    alignItems: "center",
+    justifyContent: "center",
+    position:'absolute',
+    bottom:100,
+    width:'100%',
+    alignSelf:'center',
+    backgroundColor: "#5E9C60",
+    paddingHorizontal: 20,
+    height: "5%",
+    borderRadius: 5,
+  },
+
+  big_btn_text: {
+    fontSize: 16,
+    color: "#FFF",
+  
+  },
 });
 
 export default Incomes;

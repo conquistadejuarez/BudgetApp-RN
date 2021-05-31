@@ -1,257 +1,284 @@
-import React, {useContext} from 'react';
-import {View, Text, StyleSheet, Dimensions, TouchableHighlight, Image} from 'react-native';
+import React, {useState, useEffect, useContext} from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  TouchableOpacity,
+  Image,
+  FlatList,
+} from "react-native";
+import Header from "../Components/Header/index";
 import {Context} from '../context/Store';
-import Header from '../Components/Header/index';
-
-const MainPage = ({navigation}) => {
-
-
-
-    const [state, dispatch] = useContext(Context);
-
-    const logout = () => {
-        dispatch({type:'SET_TOKEN', payload:""});
-        dispatch({type:'SET_ID', payload:""});
-       }
-
-    const onPressHander = () => {
-
-        navigation.navigate('Expenses')
-    }
-
-    const onPressHander1 = () => {
-
-        navigation.navigate('Incomes')
-    }
-
-
-    return(
-
-        <View style={styles.container}>
-
-        <Header />
-        <View style={styles.middle}>
-
-            <Text style={{marginBottom:10,}}>Date range</Text>
-
-        <View style={styles.dates}>
-                <Text>Date</Text>
-
-                <View style={styles.datesMain}>
-                    <Text>5/13/2021 - 5/16/2021</Text>
-                    <Image style={styles.menu} source={require('..//src/images/blackCalendar.png')}/>
-                </View>
-
-            </View>
-            
-            <View style={styles.datesMain}>
-                <Text>Balance</Text>
-                <Text style={{color:'rgba(0, 0, 0, 0.5)'}}>Details</Text>
-            </View>
-
-            <View style={styles.center}>
-                <Text style={styles.miniText}>Total</Text>
-                <Text style={styles.bigNumber}>$4,981.87</Text>
-            </View>
-
-            <View style={styles.expenses}>
-            <Text>Expenses</Text>
-            <View style={styles.expensesRow}>
-                <Text>$350.87</Text>
-                <TouchableHighlight onPress={onPressHander}>
-                <Image style={styles.menu} source={require('..//src/images/plus-circle.png')}/>
-                </TouchableHighlight>
-            </View>
-                
-
-            </View>
-
-            <View style={styles.expenses1}>
-            <Text>Income</Text>
-            <View style={styles.expensesRow1}>
-                <Text>$3400</Text>
-                <TouchableHighlight onPress={onPressHander1}>
-                <Image style={styles.menu} source={require('..//src/images/plus-circle-green.png')}/>
-                </TouchableHighlight>
-            </View>
-            </View>
-
-            <View style={styles.datesMain}>
-                <Text>Most spent on</Text>
-                <Text style={{color:'rgba(0, 0, 0, 0.5)'}}>See all</Text>
-            </View>
-
-            <View style={styles.rows}>
-
-            <View style={styles.circle}>
-                <Text style={styles.title}>Eating out</Text>
-                <Text style={styles.numa}>$50.89</Text>
-                <Image style={styles.icons} source={require('..//src/images/fork.png')}/>
-            </View>
-
-            <View style={styles.circle}>
-                <Text style={styles.title}>Groceries</Text>
-                <Text style={styles.numa}>$32.19</Text>
-                <Image style={styles.icons} source={require('../src/images/shopping.png')}/>
-            </View>
-
-            <View style={styles.circle}>
-                <Text style={styles.title}>Clothes</Text>
-                <Text style={styles.numa}>$140</Text>
-                <Image style={styles.icons} source={require('..//src/images/clothes.png')}/>
-            </View>
-
-            <View style={styles.circle}>
-                <Text style={styles.title}>Toiletry</Text>
-                <Text style={styles.numa}>$22.999</Text>
-                <Image style={styles.icons} source={require('../src/images/toiletries.png')}/>
-            </View>
+import axios from 'axios';
+import moment from 'moment';
+import { useIsFocused } from '@react-navigation/native';
 
 
 
+const StatsMain = ({navigation}) => {
 
-            </View>
-            {/* END ROWS */}
 
+
+  const [state, dispatch] = useContext(Context);
+
+
+  const isFocused = useIsFocused();
+
+
+  const onPressHandler = () => {
+
+    navigation.navigate('Expenses')
+    
+  }
+
+  const onPressHandler1 = () => {
+
+    navigation.navigate('Incomes')
+  }
+
+
+  const AuthStr = 'Bearer ' + state.token
+
+  useEffect(() => {
+  if (isFocused) 
+
+    refresh()
+   
+
+
+  },[isFocused]);
+
+
+
+  const refresh = () => {
+    axios.get('https://budgetapp.digitalcube.rs/api/transactions?', { 'headers' : {'Authorization': AuthStr }} )
+    .then((response => { console.log(response.data); setBalance(response.data.summary.balance); setHistoryList(response.data.transactions)}))
+    .catch((error) => { console.log(error);});
+  }
+
+  const [historyList, setHistoryList] = React.useState([]);
+  const [balance, setBalance] = React.useState(0);
+
+
+  return (
+    <View style={styles.container}>
+      <Header />
+
+      <View style={styles.header}>
+        <Text style={styles.smallText}>Current balance</Text>
+        <Text style={styles.bigInt}>
+          {balance}<Text style={{ fontSize: 15,}}>RSD</Text>
+        </Text>
+      </View>
+
+      <View style={styles.general}>
+
+      <TouchableOpacity
+      onPress={() => onPressHandler1()}
+      >
+
+        <View style={styles.buttons}>
+          <View style={styles.left}>
+            <Text style={styles.nijeZnak}>Add an income</Text>
+          </View>
+          <View style={styles.right}>
+            <Image
+              style={styles.znak}
+              source={require("../src/images/plus.png")}
+            />
+          </View>
         </View>
+
+        </TouchableOpacity>
+
+        <TouchableOpacity
+      onPress={() => onPressHandler()}
+      >
+
+        <View style={styles.buttons1}>
+          <View style={styles.left}>
+            <Text style={styles.nijeZnak1}>Add an expense</Text>
+          </View>
+          <View style={styles.right1}>
+            <Image
+              style={styles.znak1}
+              source={require("../src/images/nusmi.png")}
+            />
+          </View>
         </View>
-    )
-}
+
+        </TouchableOpacity>
+
+
+
+      </View>
+
+
+      <View
+        style={{
+          borderBottomColor: "rgba(0, 0, 0, 0.1)",
+          borderBottomWidth: 1,
+          marginTop: 40,
+        }}
+      />
+      <Text style={{marginTop:20,marginBottom:20,}}>History</Text>
+      <FlatList
+        showsVerticalScrollIndicator={false}
+        data={historyList}
+        renderItem={({ item, index }) => {
+          return (
+
+            <View style={styles.row}>
+              <View style={styles.lefts}>
+                <Text style={styles.textDate}>{moment(item.created).format("MMM[\n]YY")}</Text>
+                <Image
+                  style={{width:30,height:30, resizeMode:'contain', marginLeft:10}}
+                  source={{ uri: 'https://budgetapp.digitalcube.rs/assets/icons/history/' + item.icon_png}}
+                />
+              </View>
+
+              <View style={styles.rights}>
+                <Text style={styles.textDesc}>{item.description}</Text>
+                <Text style={styles.textAmount}>{item.amount.toFixed(0)} <Text style={{fontSize:10}}>RSD</Text></Text>
+              </View>
+            </View>
+
+          );
+        }}
+      />
+
+
+
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
+  container: {
+    width: "100%",
+    height: Dimensions.get("window").height,
+    backgroundColor: "#FFF",
+    paddingHorizontal: 10,
+  },
 
-    container: {
-        width: "100%",
-        height: Dimensions.get("window").height,
-        backgroundColor: "#FFF",
-        paddingHorizontal:10,
-      },
+  header: {
+    marginTop: "25%",
+    alignSelf:'center',
+    paddingBottom:20,
+  },
+  smallText: {
+    fontSize: 16,
+    fontWeight:'600',
+  },
 
-      button: {
-        opacity:10,
-        marginTop:'20%',
-        alignSelf:'flex-start',
-        paddingHorizontal:8,
-      
-        },
+  bigInt: {
+    fontSize: 30,
+    color: "#5E9C60",
+    marginBottom:15,
+  },
 
-      buttonText: {
-        color:'#000',
-        fontSize:15,
-      },
+  general: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+  },
 
-      middle: {
-          marginTop:'23%',
-      },
+  buttons: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    backgroundColor: "#F2F9F2",
+    borderRadius: 10,
+    paddingHorizontal: 25,
+    paddingVertical: 12,
+  },
 
-      dates: {
-        backgroundColor:'#F5F5F5',
-        borderTopLeftRadius:10,
-        borderTopRightRadius:10,
-        paddingHorizontal:10,
-        alignContent:'center',
-        paddingBottom:5,
-        borderBottomWidth:0.5,
-      },
-      
-      datesMain: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        width: '100%',
-        marginTop:20,
-      },
+  buttons1: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    backgroundColor: "#FDECEC",
+    borderRadius: 10,
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+  },
 
-      center: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginTop:20,
-      },
+  nijeZnak: {
+    fontSize: 12,
+    color: "#5E9C60",
+  },
 
-      miniText: {
+  nijeZnak1: {
+    fontSize: 12,
+    color: '#E35959',
+  },
 
-        fontSize:12,
-      },
+  znak: {
+    width:16,
+    height:16,
+  },
 
-      bigNumber: {
-          fontSize:30,
-          color: '#5E9C60',
-      },
+  znak1: {
 
-      expenses: {
-         
-          backgroundColor:'#F5F5F5',
-          borderRadius:10,
-          paddingVertical:10,
-          paddingHorizontal:10,
-          marginTop:10,
-      },
-
-      expensesRow: {
-
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        width: '100%',
-        marginTop:10,
-
-      },
-
-      expenses1: {
-        backgroundColor:'rgba(127, 196, 129, 0.14)',
-        borderRadius:10,
-        paddingVertical:10,
-        paddingHorizontal:10,
-        marginTop:10,
-    },
-
-    expensesRow1: {
-
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      width: '100%',
-      marginTop:10,
-
-    },
-
-    rows:{
-
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        width: '100%',
-        marginTop:20,
-    },
-
-    circle: {
-        borderRadius:
-          Math.round(
-            Dimensions.get("window").width + Dimensions.get("window").height
-          ) / 2,
-        width: Dimensions.get("window").width * 0.22,
-        height: Dimensions.get("window").width * 0.35,
-        backgroundColor: "#FAFAFA",
-        justifyContent:'center',
-        alignItems:'center',
-        padding:5,
-      },
-
-      title: {
-        fontSize:10,
-        color:'rgba(0, 0, 0, 0.6)',
-      },
-
-      numa: {
-        fontSize:14,
-        color:'#101010',
-        paddingBottom: 20,
-
-      },
-
-      icons: {
+    width:17,
+    marginTop:5,
 
 
-      },
+  },
 
+  right: {
+    backgroundColor: "rgba(217, 239, 217, 0.6)",
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    borderRadius: 10,
+    marginLeft: 5,
+  },
 
+  right1: {
+    backgroundColor: 'rgba(249, 196, 196, 0.6)',
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    borderRadius: 10,
+    marginLeft: 5,
+    height:35,
+  },
+
+  left:{
+    alignSelf:'center',
+  },
+
+  lefts: {
+    flexDirection:'row',
+    padding:5,
+  },
+
+  rights: {
+  },
+
+  row: {
+    flexDirection:'row',
+    justifyContent:'space-between',
+    
+  },
+
+  textDate: {
+    fontSize:14,
+    fontWeight:'600',
+    color:'rgba(0, 0, 0, 0.85)',
+
+  },
+
+  textDesc: {
+
+    fontSize:14,
+    fontWeight:'400',
+    color:'#000',
+    alignSelf:'flex-end'
+
+  },
+
+  textAmount: {
+    fontSize:16,
+    fontWeight:'700',
+  }
 });
 
-export default MainPage;
-
+export default StatsMain;
