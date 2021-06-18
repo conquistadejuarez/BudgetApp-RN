@@ -4,40 +4,36 @@ import {
   Text,
   StyleSheet,
   Dimensions,
-  TouchableHighlight,
   Image,
   FlatList,
+  TouchableOpacity,
 } from "react-native";
 import { Context } from "../context/Store";
 import Header from "../Components/Header/index";
 import moment from "moment";
 import SvgImage from "../Components/SvgImage";
 import axios from "axios";
-import { useIsFocused } from '@react-navigation/native';
-import { TouchableOpacity } from "react-native-gesture-handler";
-
+import { useIsFocused } from "@react-navigation/native";
+const commaNumber = require("comma-number");
 
 const Stats = ({ navigation }) => {
-  const [state, dispatch] = useContext(Context);
 
-  const [income, setIncome] = useState('');
-  const [outcome, setOutcome] = useState('');
-  const [date, setDate] = useState('05')
+  const [state, dispatch] = useContext(Context);
+  const [income, setIncome] = useState("");
+  const [outcome, setOutcome] = useState("");
+  const [date, setDate] = React.useState(new Date());
+  const isFocused = useIsFocused();
+  const [balance, setBalance] = React.useState(0);
 
   const AuthStr = "Bearer " + state.token;
 
-
-
-  const isFocused = useIsFocused();
-
   useEffect(() => {
-
     axios
       .get("https://budgetapp.digitalcube.rs/api/transactions?", {
         headers: { Authorization: AuthStr },
       })
       .then((response) => {
-       // console.log(response.data);
+        // console.log(response.data);
         setBalance(response.data.summary.balance);
       })
       .catch((error) => {
@@ -45,31 +41,34 @@ const Stats = ({ navigation }) => {
       });
   }, []);
 
-  const [balance, setBalance] = React.useState(0);
+  
+  const changeMonth = (pomeraj) => {
+    let newDate = new Date(date.setMonth(date.getMonth() + pomeraj));
+    setDate(newDate);
+  };
 
-
-  useEffect(() => {
-
-    if (isFocused) {
-
-      axios
+  const showMonth = () => {
+    axios
       .get(
-        `https://budgetapp.digitalcube.rs/api/transactions/statistics?year=2021&month=${date}`,
+        `https://budgetapp.digitalcube.rs/api/transactions/statistics?year=${moment(date).format('YYYY')}&month=${moment(date).format('M')}`,
         { headers: { Authorization: AuthStr } }
       )
       .then((res) => {
         console.log(res.data);
         setNiz(res.data.by_category);
-        setIncome(res.data.income)
-        setOutcome(res.data.outcome)
+        setIncome(res.data.income);
+        setOutcome(res.data.outcome);
       })
       .catch((error) => {
         console.log(error);
       });
+  };
 
+  useEffect(() => {
+    if (isFocused) {
+      showMonth();
     }
-    
-  }, [isFocused]);
+  }, [isFocused, date]);
 
   const [niz, setNiz] = useState([]);
 
@@ -80,32 +79,28 @@ const Stats = ({ navigation }) => {
         <View style={styles.dates}>
           <View style={styles.left}>
             <Text style={{ fontSize: 28, fontWeight: "600" }}>
-              {moment().format("MMM YYYY")}
+              {moment(date).format("MMMM YYYY")}
             </Text>
           </View>
 
           <View style={styles.right}>
-            <TouchableOpacity
-            
-            >
-            <Image
-              source={require("../src/images/chevron-left.png")}
-              style={{ marginRight: 20 }}
-            />
+            <TouchableOpacity onPress={() => changeMonth(-1)}>
+              <Image
+                source={require("../src/images/chevron-left.png")}
+                style={{ marginRight: 20 }}
+              />
             </TouchableOpacity>
 
-            <TouchableOpacity
-            >
-            <Image source={require("../src/images/chevron-left-1.png")} />
+            <TouchableOpacity onPress={() => changeMonth(1)}>
+              <Image source={require("../src/images/chevron-left-1.png")} />
             </TouchableOpacity>
-
           </View>
         </View>
 
         <View style={styles.center}>
-          <Text style={styles.miniText}>Total in may</Text>
+          <Text style={styles.miniText}>Total in {moment(date).format('MMM')}</Text>
           <Text style={styles.bigNumber}>
-            {balance}
+            {commaNumber(income - outcome)}
             <Text style={{ fontSize: 12 }}>&nbsp;RSD</Text>
           </Text>
         </View>
@@ -114,7 +109,8 @@ const Stats = ({ navigation }) => {
           <Text style={styles.expensesBlackSmall}>Expenses</Text>
           <View style={styles.expensesRow}>
             <Text style={styles.expensesBlackNumber}>
-              {outcome}<Text style={{ fontSize: 10 }}>&nbsp;RSD</Text>
+              {commaNumber(outcome)}
+              <Text style={{ fontSize: 10 }}>&nbsp;RSD</Text>
             </Text>
           </View>
         </View>
@@ -123,7 +119,8 @@ const Stats = ({ navigation }) => {
           <Text style={styles.incomesGreenSmall}>Income</Text>
           <View style={styles.expensesRow1}>
             <Text style={styles.incomesGreenNumber}>
-              {income}<Text style={{ fontSize: 10 }}>&nbsp;RSD</Text>
+              {commaNumber(income)}
+              <Text style={{ fontSize: 10 }}>&nbsp;RSD</Text>
             </Text>
           </View>
         </View>
@@ -141,7 +138,7 @@ const Stats = ({ navigation }) => {
             return (
               <View style={styles.circle}>
                 <Text style={styles.title}>{item.category_name}</Text>
-                <Text style={styles.numa}>{item.amount}</Text>
+                <Text style={styles.numa}>{commaNumber(item.amount)}</Text>
                 <Text
                   style={{
                     paddingBottom: 20,
@@ -182,10 +179,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
   },
 
-  buttonText: {
-    color: "#000",
-    fontSize: 15,
-  },
 
   middle: {
     marginTop: "23%",
@@ -214,11 +207,13 @@ const styles = StyleSheet.create({
 
   miniText: {
     fontSize: 12,
+    fontFamily:'Regular'
   },
 
   bigNumber: {
     fontSize: 30,
     color: "#5E9C60",
+    fontFamily:'SemiBold'
   },
 
   expenses: {
@@ -241,24 +236,27 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     fontSize: 12,
     color: "#000",
+    fontFamily:'Regular'
   },
 
   expensesBlackNumber: {
     alignSelf: "center",
     fontSize: 20,
-    fontWeight: "600",
+    fontFamily:'SemiBold'
   },
 
   incomesGreenSmall: {
     alignSelf: "center",
     fontSize: 12,
     color: "#5E9C60",
+    fontFamily:'Regular'
   },
 
   incomesGreenNumber: {
     alignSelf: "center",
     fontSize: 20,
     color: "#5E9C60",
+    fontFamily:'SemiBold'
   },
 
   rows: {
@@ -286,11 +284,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 10,
     color: "rgba(0, 0, 0, 0.6)",
+    fontFamily:'Regular'
   },
 
   numa: {
     fontSize: 14,
     color: "#101010",
+    fontFamily:'SemiBold'
   },
 });
 

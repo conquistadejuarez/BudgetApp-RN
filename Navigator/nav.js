@@ -31,11 +31,17 @@ const Navigator1 = () => {
         <Stack.Screen
             name="Expenses"
             component={EXP}
+            options={{
+                headerTitleAlign:'center'
+            }}
          />
 
         <Stack.Screen
             name="Incomes"
             component={INC}
+            options={{
+                headerTitleAlign:'center'
+            }}
          />
     </Stack.Navigator>
 

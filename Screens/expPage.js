@@ -83,6 +83,7 @@ const EXP = ({navigation}) => {
           placeholder={"Enter amount here"}
           placeholderTextColor={"#000"}
           value={amount}
+          keyboardType={"numeric" }
           onChangeText={(value) => setAmount(value)}
         />
         <View style={styles.muka}>
@@ -186,6 +187,7 @@ const styles = StyleSheet.create({
   input: {
     color: "#000",
     width: "80%",
+    fontFamily:'Regular'
 
   },
 
@@ -193,6 +195,7 @@ const styles = StyleSheet.create({
     width: "30%",
     borderLeftWidth: 1,
     paddingLeft: 10,
+    fontFamily:'Regular'
   },
 
   muka: {
@@ -234,12 +237,14 @@ const styles = StyleSheet.create({
   title: {
     color: "rgba(0,0,0,0.9)",
     fontSize: 16,
+    fontFamily:'Regular'
 
   },
 
   subtitle: {
     color: "rgba(0,0,0,0.6)",
     fontSize: 12,
+    fontFamily:'Regular'
 
   },
 
@@ -259,6 +264,7 @@ const styles = StyleSheet.create({
   big_btn_text: {
     fontSize: 16,
     color: "#FFF",
+    fontFamily:'Regular'
 
   },
 });

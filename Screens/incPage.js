@@ -67,7 +67,7 @@ const INC = ({ navigation }) => {
         console.log(error);
       });
 
-    console.log('0112208970')
+    console.log('011220888')
 
     menjaj();
 
@@ -83,6 +83,7 @@ const INC = ({ navigation }) => {
           placeholder={"Enter amount here"}
           placeholderTextColor={"#000"}
           value={amount}
+          keyboardType={"numeric"}
           onChangeText={(value) => setAmount(value)}
         />
         <View style={styles.muka}>
@@ -187,12 +188,14 @@ const styles = StyleSheet.create({
   input: {
     color: "#000",
     width: "80%",
+    fontFamily:'Regular'
   },
 
   input1: {
     width: "30%",
     borderLeftWidth: 1,
     paddingLeft: 10,
+    fontFamily:'Regular'
   },
 
   muka: {
@@ -209,20 +212,19 @@ const styles = StyleSheet.create({
   big_btn: {
     alignItems: "center",
     justifyContent: "center",
-    position: "absolute",
     width: "100%",
-    bottom: 150,
     alignSelf: "center",
-
     backgroundColor: "#5E9C60",
-    paddingHorizontal: 20,
     height: "5%",
     borderRadius: 5,
+    position:'absolute',
+    bottom:130,
   },
 
   big_btn_text: {
     fontSize: 16,
     color: "#FFF",
+    fontFamily:'Regular'
   },
   choser: {
     flexDirection: "row",
@@ -252,11 +254,13 @@ const styles = StyleSheet.create({
   title: {
     color: "rgba(0,0,0,0.9)",
     fontSize: 16,
+    fontFamily:'Regular'
   },
 
   subtitle: {
     color: "rgba(0,0,0,0.6)",
     fontSize: 12,
+    fontFamily:'Regular'
   },
 });
 

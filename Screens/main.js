@@ -13,6 +13,7 @@ import {Context} from '../context/Store';
 import axios from 'axios';
 import moment from 'moment';
 import { useIsFocused } from '@react-navigation/native';
+const commaNumber = require('comma-number')
 
 
 
@@ -68,7 +69,7 @@ const StatsMain = ({navigation}) => {
       <View style={styles.header}>
         <Text style={styles.smallText}>Current balance</Text>
         <Text style={styles.bigInt}>
-          {balance}<Text style={{ fontSize: 15,}}>RSD</Text>
+          {commaNumber(balance)}<Text style={{ fontSize: 15,}}>RSD</Text>
         </Text>
       </View>
 
@@ -140,7 +141,7 @@ const StatsMain = ({navigation}) => {
 
               <View style={styles.rights}>
                 <Text style={styles.textDesc}>{item.description}</Text>
-                <Text style={styles.textAmount}>{item.amount.toFixed(0)} <Text style={{fontSize:10}}>RSD</Text></Text>
+                <Text style={styles.textAmount}>{commaNumber(item.amount)} <Text style={{fontSize:10}}>RSD</Text></Text>
               </View>
             </View>
 
@@ -170,12 +171,14 @@ const styles = StyleSheet.create({
   smallText: {
     fontSize: 16,
     fontWeight:'600',
+    fontFamily:'Regular'
   },
 
   bigInt: {
     fontSize: 30,
     color: "#5E9C60",
     marginBottom:15,
+    fontFamily:'SemiBold'
   },
 
   general: {
@@ -204,11 +207,13 @@ const styles = StyleSheet.create({
   nijeZnak: {
     fontSize: 12,
     color: "#5E9C60",
+    fontFamily:'Regular'
   },
 
   nijeZnak1: {
     fontSize: 12,
     color: '#E35959',
+    fontFamily:'Regular'
   },
 
   znak: {
@@ -263,6 +268,7 @@ const styles = StyleSheet.create({
     fontSize:14,
     fontWeight:'600',
     color:'rgba(0, 0, 0, 0.85)',
+    fontFamily:'Regular'
 
   },
 
@@ -271,13 +277,15 @@ const styles = StyleSheet.create({
     fontSize:14,
     fontWeight:'400',
     color:'#000',
-    alignSelf:'flex-end'
+    alignSelf:'flex-end',
+    fontFamily:'Regular'
 
   },
 
   textAmount: {
     fontSize:16,
-    fontWeight:'700',
+    fontFamily:'SemiBold',
+    alignSelf:'flex-end'
   }
 });
 
