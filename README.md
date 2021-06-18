@@ -1,5 +1,7 @@
 
 <h1 align="center">BudgetApp - React native application</h1>
+<p align="center">The application was created as a task for a job interview in the company Digital Cube.</p>
+<hr />
 
 
 <p align="center">
